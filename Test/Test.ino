@@ -1,24 +1,23 @@
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
-#include <SPI.h>
-#include <Wire.h>
+#include "DHT.h"
+#define DHTPIN 2
+#define DHTTYPE DHT11
 
-Adafruit_SSD1306 oled = Adafruit_SSD1306(128, 32, &Wire);
 
-void setup(void) {
-    Serial.begin(9600);
-  oled.begin();
-  oled.begin();
+DHT dht(DHTPIN, DHTTYPE);
+
+void setup() {
+   Serial.begin(9600); 
+   Serial.println("DHTxx test!");
+   dht.begin();
 }
+void loop() {
+   
+   float t = dht.readTemperature();
+   
+   Serial.print("Temperature: "); 
+   Serial.print(t);
+   Serial.print(" *C ");
+   
+   delay(2000);
 
-void loop(void) {
-  float current_mA = 0;
-
-  oled.clearBuffer();					// clear the internal menory
-  	// choose a suitable font
-  oled.setCursor (0, 32);
-  
-  oled.print(current_mA);
-  oled.sendBuffer();					// transfer internal memory to the display
-  delay(200);
 }

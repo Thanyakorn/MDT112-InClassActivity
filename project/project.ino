@@ -5,6 +5,12 @@
 
 Adafruit_SSD1306 oled = Adafruit_SSD1306(128, 32, &Wire);
 
+#include "DHT.h"
+#define DHTPIN 2
+#define DHTTYPE DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
+
 const int analogInPin = A0; //ประกาศขา
 const int relay = 13;  //ขา Relay
 
@@ -20,6 +26,9 @@ void setup(){
   oled.begin(0x3C); // Address 0x3C for 128x32
   oled.clearDisplay();
 
+   Serial.println("DHTxx test!");
+   dht.begin();
+
   delay(1000);
 
   }
@@ -29,6 +38,9 @@ void loop(){
   Moisture = analogRead(analogInPin);
   outputValue = map(Moisture, 0, 1023, 100, 0);
 
+  float t = dht.readTemperature();
+   
+   
   oled.clearDisplay();
   oled.setCursor(70, 0);
   oled.setTextColor(SSD1306_WHITE);
@@ -40,31 +52,36 @@ void loop(){
   oled.setTextColor(BLACK, WHITE);
   oled.print("Moisture =");
 
-  oled.setCursor(100, 0);
+  
+  oled.setCursor(85, 0);
   oled.setTextColor(SSD1306_WHITE);
   oled.setTextSize(1);
   oled.print(" %");
 
-  oled.setCursor(100, 20);
-  oled.setTextColor(SSD1306_WHITE);
+  oled.setCursor(85, 20);
   oled.setTextSize(1);
-  oled.print(" C");
+  oled.print(t);
+   
+  oled.setCursor(115, 20);
+  oled.setTextColor(SSD1306_WHITE);
+  oled.setTextSize(1);              // ขนาดตัวอักษร
+  oled.print(" C");                 //องศา
 
   oled.setCursor(0, 20);
   oled.setTextSize(1);
   oled.setTextColor(BLACK, WHITE);
-  oled.println("temperature =");
+  oled.println("temperature =");   //=ชื่ออณุหภูมิ
 
 
-  if (outputValue <= 40) {  //ตั้งค่า % ที่ต้องการจะรดน้ำต้นไม้
+  if (outputValue <= 40) {         //ตั้งค่า % ที่ต้องการจะรดน้ำต้นไม้
     digitalWrite(relay, HIGH);
   }
 
   else {
-    digitalWrite(relay, LOW); //จะหยุดเมื่อน้อยกว่า 40
+    digitalWrite(relay, LOW);      //จะหยุดเมื่อน้อยกว่า 40
   }
 
   oled.display();
-  delay(1000);
+  delay(5000);
   
 }
