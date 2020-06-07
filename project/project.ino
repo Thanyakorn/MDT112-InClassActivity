@@ -1,11 +1,11 @@
-#include <Adafruit_GFX.h>
+#include <Adafruit_GFX.h>  //ประค่าของตัววัดคาวมชื้นดิน
 #include <Adafruit_SSD1306.h>
 #include <SPI.h>
 #include <Wire.h>
 
 Adafruit_SSD1306 oled = Adafruit_SSD1306(128, 32, &Wire);
 
-#include "DHT.h"
+#include "DHT.h"   //ประกาศค่าของตัววัดอณุหภูมิ
 #define DHTPIN 2
 #define DHTTYPE DHT11
 
@@ -19,18 +19,15 @@ int outputValue = 0;        // ตัวแปรสำหรับ Map เพ�
 
 void setup(){
 
-  
   Serial.begin(9600);
 
   pinMode(relay, OUTPUT);
   oled.begin(0x3C); // Address 0x3C for 128x32
   oled.clearDisplay();
 
-   Serial.println("DHTxx test!");
-   dht.begin();
+  dht.begin();
 
   delay(1000);
-
   }
 
 void loop(){
@@ -40,12 +37,12 @@ void loop(){
 
   float t = dht.readTemperature();
    
-   
   oled.clearDisplay();
   oled.setCursor(70, 0);
   oled.setTextColor(SSD1306_WHITE);
   oled.setTextSize(1);
   oled.print(outputValue);
+  delay(500);
 
   oled.setCursor(0, 0);
   oled.setTextSize(1);
@@ -82,6 +79,6 @@ void loop(){
   }
 
   oled.display();
-  delay(5000);
+  delay(20000);
   
 }
