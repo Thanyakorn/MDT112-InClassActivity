@@ -1,38 +1,24 @@
-int inPin = 2;         // the number of the input pin
-int outPin = 13;       // the number of the output pin
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <SPI.h>
+#include <Wire.h>
 
-int state = LOW;      // the current state of the output pin
-int reading;           // the current reading from the input pin
-int previous = HIGH;    // the previous reading from the input pin
+Adafruit_SSD1306 oled = Adafruit_SSD1306(128, 32, &Wire);
 
-// the follow variables are long's because the time, measured in miliseconds,
-// will quickly become a bigger number than can be stored in an int.
-long time = 0;         // the last time the output pin was toggled
-long debounce = 200;   // the debounce time, increase if the output flickers
-
-void setup()
-{
-  pinMode(inPin, INPUT_PULLUP);
-  pinMode(outPin, OUTPUT);
+void setup(void) {
+    Serial.begin(9600);
+  oled.begin();
+  oled.begin();
 }
 
-void loop()
-{
-  reading = digitalRead(inPin);
+void loop(void) {
+  float current_mA = 0;
 
-  // if the input just went from LOW and HIGH and we've waited long enough
-  // to ignore any noise on the circuit, toggle the output pin and remember
-  // the time
-  if (reading == HIGH && previous == LOW && millis() - time > debounce) {
-    if (state == HIGH)
-      state = LOW;
-    else
-      state = HIGH;
-
-    time = millis();    
-  }
-
-  digitalWrite(outPin, state);
-
-  previous = reading;
+  oled.clearBuffer();					// clear the internal menory
+  	// choose a suitable font
+  oled.setCursor (0, 32);
+  
+  oled.print(current_mA);
+  oled.sendBuffer();					// transfer internal memory to the display
+  delay(200);
 }
