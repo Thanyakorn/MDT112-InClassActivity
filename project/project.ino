@@ -38,18 +38,18 @@ void loop(){
   float t = dht.readTemperature();
    
   oled.clearDisplay();
+  
+  oled.setCursor(0, 0);
+  oled.setTextSize(1);
+  oled.setTextColor(BLACK, WHITE);
+  oled.print("Moisture =");
+
   oled.setCursor(70, 0);
   oled.setTextColor(SSD1306_WHITE);
   oled.setTextSize(1);
   oled.print(outputValue);
   delay(500);
 
-  oled.setCursor(0, 0);
-  oled.setTextSize(1);
-  oled.setTextColor(BLACK, WHITE);
-  oled.print("Moisture =");
-
-  
   oled.setCursor(85, 0);
   oled.setTextColor(SSD1306_WHITE);
   oled.setTextSize(1);
@@ -69,16 +69,17 @@ void loop(){
   oled.setTextColor(BLACK, WHITE);
   oled.println("temperature =");   //=ชื่ออณุหภูมิ
 
+  oled.display();
+
 
   if (outputValue <= 40) {         //ตั้งค่า % ที่ต้องการจะรดน้ำต้นไม้
     digitalWrite(relay, HIGH);
+    delay(20000); 
   }
 
   else {
     digitalWrite(relay, LOW);      //จะหยุดเมื่อน้อยกว่า 40
+    delay(20000); 
   }
-
-  oled.display();
-  delay(20000);
   
 }
